@@ -46,10 +46,6 @@ dL = hypot(dx,dy);
 xoff = @(a) -a*dy./dL + xt;
 yoff = @(a)  a*dx./dL + yt;
 
-% plot reference line
-plot(xt,yt,'g')
-hold on
-
 % offset data
 offset = [-twrt twlt];
 for i = 1:numel(xt)
@@ -59,24 +55,6 @@ for i = 1:numel(xt)
     xout  = xoff(offset(i,2));      % get outer offset curve
     yout  = yoff(offset(i,2));
 end
-
-% plot inner track
-plot(xin,yin,'color','b','linew',2)
-% plot outer track
-plot(xout,yout,'color','r','linew',2)
-hold off
-axis equal
-
-xlabel('x(m)','fontweight','bold','fontsize',14)
-ylabel('y(m)','fontweight','bold','fontsize',14)
-title(sprintf(name),'fontsize',16)
-
-% % plot segments
-% figure
-% hold on
-% for i=1:numel(xout)
-%     plot([xin(i) xout(i)], [yin(i) yout(i)])
-% end
 
 % form delta matrices
 delx = xout - xin;
