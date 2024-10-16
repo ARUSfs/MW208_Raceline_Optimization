@@ -21,6 +21,8 @@ y =  data(:,2);
 twr = data(:,3);
 twl = data(:,4);
 
+plot(twr)
+
 % interpolate data to get finer curve with equal distances between each segment
 
 % higher no. of segments causes trajectory to follow the reference line
@@ -48,12 +50,22 @@ yoff = @(a)  a*dx./dL + yt;
 
 % offset data
 offset = [-twrt twlt];
+xin = zeros(1500,1);
+yin = zeros(1500,1);
+xout = zeros(1500,1);
+yout = zeros(1500,1);
+
 for i = 1:numel(xt)
-    xin = xoff(offset(i,1));      % get inner offset curve
-    yin = yoff(offset(i,1));
+    xinv = xoff(offset(i,1));      % get inner offset curve
+    yinv = yoff(offset(i,1));
     
-    xout  = xoff(offset(i,2));      % get outer offset curve
-    yout  = yoff(offset(i,2));
+    xoutv  = xoff(offset(i,2));      % get outer offset curve
+    youtv  = yoff(offset(i,2));
+
+    xin(i) =xinv(i);
+    yin(i) =yinv(i);
+    xout(i) = xoutv(i);
+    yout(i) = youtv(i);
 end
 
 % form delta matrices

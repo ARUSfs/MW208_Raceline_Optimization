@@ -21,37 +21,4 @@ Shortest Path Trajectory |  Minimum Curvature Trajectory
 
 For comparison - [Raceline uploaded by TUMFTM for Silverstone track](https://user-images.githubusercontent.com/58664908/128598878-c3997de2-ea97-4d82-a775-bd9cfa0a177a.png)
 
-
-### **Velocity Profile Generation**
-
-To generate a velocity profile, I referred to this paper, [Optimized Trajectory Generation for Car-Like Robots on a Closed-Loop Track](https://digitalcommons.du.edu/etd/1370/). Along with that, I also followed [Optimal velocity profile generation for given acceleration limits: theoretical analysis](https://ieeexplore.ieee.org/abstract/document/1470174/), which actually inspired the previous report and mentioned it as a reference.
-
-The main idea was to identify the max curvature points for the optimized trajectory, assign a certain critical velocity to each one, and generate velocity profiles around these points. Since it is assumed that the vehicle follows the course perfectly, the only driver input would be the throttle and brake commands. It is mentioned in the previous papers that to achieve minimum time, control inputs for acc and dec must be 1 and -1, respectively. 
-
-These intermediate velocity profiles are generated according to specific rules defined in the literature. The final profile is the minimum of all these in-between profiles. One modification that I made to these rules was to check if the critical velocity at the max curvature point was greater than the acc profile from the previous step; if it was, I continued the previous profile rather than starting a new one. The exact process was followed for the deceleration profiles.
-
-Finally, lap times were calculated from the velocity and length vectors in order to validate my results with actual data.
-
-Track Name | Calculated (s) | Current Lap Record (s)|
-:-------------------------:|:-------------------------:|:-------------------------:
-Silverstone, UK (F1) | 96.6 | 90
-Spa, Belgium (F1) | 109 | 106
-
-As it was previously discussed, the literature mentioned in this section has some errors in the critical velocity and velocity iteration formulae. I have corrected them in my implementation. I have also included aerodynamics effects for traction and braking by inserting a -v^2 term within the equations. Since the velocities are really high in F1, aerodynamics drag cannot be neglected.
-
-Velocity Profile of Silverstone track | Velocity Track Map of Silverstone track
-:-------------------------:|:-------------------------:
-<img src="https://user-images.githubusercontent.com/58664908/132526875-029ec40b-b303-421a-b602-9892c41e65f6.png" width=100% height=100%>|<img src="https://user-images.githubusercontent.com/58664908/132527879-a54d3556-4485-4eea-b9a3-eb8375a99246.png" width=100% height=100%>
-  
-### **Vehicle path tracking using Simulink**
-<img src="https://user-images.githubusercontent.com/58664908/147874306-bdd48401-05a6-4731-b02f-087e0671b587.png" width=100% height=100%>
-  
-This Simulink model extends the previous point mass model into a 3DOF one using the Stanley control methodology and various pre-built blocks in Simulink (MATLAB R2021b version). This model was built in collaboration with Veer Alakshendra, the author and mentor of this project. While modifying the model, make sure that the vehicle parameters are parametrized properly.
- 
-In case of any queries please reach out to the MathWorks Student Competition Team via racinglounge@mathworks.com
-  
-### **Notes**
-  
-Most of the track data I tested was from this Github repository, [Race Track Database](https://github.com/TUMFTM/racetrack-database). The data is available in a neat format with the x and y coordinates in the first two columns and the left and right track widths on the other two.
-
 Any feedback or suggestions are welcome!
