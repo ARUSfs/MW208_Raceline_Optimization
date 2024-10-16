@@ -21,8 +21,6 @@ y =  data(:,2);
 twr = data(:,3);
 twl = data(:,4);
 
-plot(twr)
-
 % interpolate data to get finer curve with equal distances between each segment
 
 % higher no. of segments causes trajectory to follow the reference line
