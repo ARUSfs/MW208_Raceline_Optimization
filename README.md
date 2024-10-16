@@ -1,6 +1,10 @@
 # MW208 Raceline Optimization
 <Desc of proj>
-  
+
+### **Cambios ARUSDV**
+
+Simplemente se han eliminado todos los archivos que no son estrictamente necesarios y se ha creado el script **'calculateTrajectory.m'** para resumir el proceso de cálculo de la solución. Además se ha añadido el circuito de FSG para trabajar en un contexto FS. Os dejo con el texto original explicando el algoritmo:
+
 ### **Concept**
 
 My main idea consisted of two parts: first, create a minimum curvature trajectory and then develop a velocity profile based around it. This method is generally used by almost every paper written on this topic, at least as a starting point. I also calculated the velocity profile of the shortest path around the given track to show how bad the lap times are for it compared to the min curvature one. I also validated most of my results with data and literature I found online.
