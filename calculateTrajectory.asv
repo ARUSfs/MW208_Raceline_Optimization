@@ -1,18 +1,18 @@
 clear
 clc
 %% Preparacion de la ruta
-circuito = jsondecode(fileread("FSG24.json"));
+circuito = jsondecode(fileread("FSEast23.json"));
 route = [circuito.x circuito.y];
 kk = circuito.k;
 track = [route, 0.6*ones(length(kk),2)];
 
 %% Solucion
-[sol,trackData]=minCurvaturePathGenFunction(track);
+[sol,trackData]=minCurvaturePathGenFunction(track,'FSG');
 
 %% Representacion grafica
-FSG24_cones
-azules = cones(1:ceil(height(cones)/2)+1,:);
-amarillos = cones(ceil(height(cones)/2)+2:end,:);
+FSEast23_cones
+azules = cones(1:94,:);
+amarillos = cones(95:end-2,:);
 hold on
 plot(azules(:,1),azules(:,2),'b.','MarkerSize',15)
 plot(amarillos(:,1),amarillos(:,2),'y.','MarkerSize',15)

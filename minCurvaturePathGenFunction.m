@@ -9,7 +9,7 @@
 % trajSP - [x-coordinate of traj y-coordinate of traj]
 % trackData - [x-ref y-ref xin yin xout yout]
 
-function [trajMCP, trackData] = minCurvaturePathGenFunction(track,name)
+function [trajMCP, trackData] = minCurvaturePathGenFunction(track)
 %% Processing  track data
 
 % track data - first point repeated
@@ -34,6 +34,8 @@ finalStepLocs = linspace(0,cumulativeLen(end), nseg);
 finalPathXY = interp1(cumulativeLen, pathXY, finalStepLocs);
 xt = finalPathXY(:,1);
 yt = finalPathXY(:,2);
+stepLengths = sqrt(sum(diff([xt yt],[],1).^2,2));
+stepLengths = [0; stepLengths]; % add the starting point
 twrt = interp1(cumulativeLen, twr, finalStepLocs,'spline')';
 twlt = interp1(cumulativeLen, twl, finalStepLocs,'spline')';
 
@@ -114,12 +116,19 @@ end
 lb = zeros(n,1);
 ub = ones(size(lb));
 
-% if start and end points are the same
-Aeq      =   zeros(1,n);
-Aeq(1)   =   1;
-Aeq(end) =   -1;
-beq      =   0;
-    
+%% Equality restrictions (fixed start point)
+Aeq = zeros(4,n);
+Aeq(1,1) = 1;
+Aeq(2,2) = 1;
+Aeq(3,n-1) = 1;
+Aeq(4,n) = 1;
+
+beq = zeros(height(Aeq),1);
+beq(1) = 0.5;
+beq(2) = 0.5;
+beq(3) = 0.5;
+beq(4) = 0.5;
+
 %% Solver
 
 options = optimoptions('quadprog','Display','iter');
@@ -143,7 +152,6 @@ hold on
 
 % plot starting line
 plot([xin(1) xout(1)], [yin(1) yout(1)],'color','b','linew',2)
-% plot([xin(2) xout(2)], [yin(2) yout(2)],'color','k','linew',2)
 
 % plot reference line
 plot(xt,yt,'--')
@@ -157,8 +165,8 @@ plot(xout,yout,'color','k')
 hold off
 axis equal
 
-xlabel('x(m)','fontweight','bold','fontsize',14)
-ylabel('y(m)','fontweight','bold','fontsize',14)
-title(sprintf(name,'%s - Minimum Curvature Trajectory'),'fontsize',16)
+xlabel('x (m)','fontweight','bold','fontsize',14,'Interpreter','latex')
+ylabel('y (m)','fontweight','bold','fontsize',14,'Interpreter','latex')
+title('Minimum Curvature Trajectory','fontsize',16,'Interpreter','latex')
 
 trajMCP = [xresMCP yresMCP];
