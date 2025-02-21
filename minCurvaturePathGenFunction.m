@@ -34,8 +34,6 @@ finalStepLocs = linspace(0,cumulativeLen(end), nseg);
 finalPathXY = interp1(cumulativeLen, pathXY, finalStepLocs);
 xt = finalPathXY(:,1);
 yt = finalPathXY(:,2);
-stepLengths = sqrt(sum(diff([xt yt],[],1).^2,2));
-stepLengths = [0; stepLengths]; % add the starting point
 twrt = interp1(cumulativeLen, twr, finalStepLocs,'spline')';
 twlt = interp1(cumulativeLen, twl, finalStepLocs,'spline')';
 
@@ -131,7 +129,7 @@ beq(4) = 0.5;
 
 %% Solver
 
-options = optimoptions('quadprog','Display','iter');
+options = optimoptions('quadprog','Display','iter-detailed');
 [resMCP,fval,exitflag,output] = quadprog(2*H,B',[],[],Aeq,beq,lb,ub,[],options);
 
 %% Plotting results
