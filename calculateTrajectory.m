@@ -1,10 +1,17 @@
 clear
 clc
 %% Preparacion de la ruta
+% load('FSG.mat')
+% % N_suav = 20;
+% % route = [Ruta(1,1) movmean(interp1(1:length(Ruta(:,1)),Ruta(:,1),linspace(1,height(Ruta),1000)),N_suav) Ruta(1,1);
+% %    Ruta(1,2) movmean(interp1(1:length(Ruta(:,2)),Ruta(:,2),linspace(1,height(Ruta),1000)),N_suav) Ruta(1,2)]';
 circuito = jsondecode(fileread("FSG24.json"));
 FSG24_cones
 azules = cones(1:ceil(height(cones)/2)+1,:);
 amarillos = cones(ceil(height(cones)/2)+2:end,:);
+% route = [Ruta;Ruta(1,:)];
+% amarillos = amarillos(1:end-1,:);
+% azules = azules(1:end-1,:);
 
 route = [circuito.x circuito.y];
 tracklimit_right = interpolate_cones([amarillos(:,1:2); amarillos(1,1:2)],height(route));
@@ -15,6 +22,8 @@ twl = min_dist(route,tracklimit_left)-min_width;
 track = [route,[twr twl]];
 
 %% Solucion
+[sol,~]=minCurvaturePathGenFunction(track);
+track = [sol,[min_dist(sol,tracklimit_right)-min_width min_dist(sol,tracklimit_left)-min_width]];
 [sol,trackData]=minCurvaturePathGenFunction(track);
 
 %% Representacion grafica
@@ -39,6 +48,7 @@ stepLengths = [0; stepLengths]; % add the starting point
 cumulativeLen = cumsum(stepLengths);
 finalStepLocs = linspace(0,cumulativeLen(end), nseg);
 final_cones = interp1(cumulativeLen, cones, finalStepLocs);
+% final_cones = cones;
 end
 
 function d=min_dist(v1,v2)
